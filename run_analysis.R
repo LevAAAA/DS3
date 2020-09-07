@@ -1,3 +1,4 @@
+library(dplyr)
 #0. Reading and preparation test and train sets
 
 filename <- "DS3.zip"
@@ -23,7 +24,7 @@ activities<-read.csv(".\\UCI HAR Dataset\\activity_labels.txt", sep=" ", header 
 
 #read test set from x_test.txt based on column width(16) and used column names from features
 test_set<-read.fwf(".\\UCI HAR Dataset\\test\\X_test.txt", widths = rep(16, each=NROW(features)), 
-                   col.names = features$V2)
+                   col.names = features$functions)
 
 #read test set activities from y_test.txt 
 test_set_activities<-read.csv(".\\UCI HAR Dataset\\test\\y_test.txt", header=FALSE, 
@@ -39,7 +40,7 @@ test_set<-cbind(test_set_subject, test_set_activities, test_set)
 
 #read train set from x_train.txt based on column width(16) and used column names from features
 train_set<-read.fwf(".\\UCI HAR Dataset\\train\\X_train.txt", widths = rep(16, each=NROW(features)),
-                    col.names = features$V2)
+                    col.names = features$functions)
 
 #read train set activities from y_train.txt 
 train_set_activities<-read.csv(".\\UCI HAR Dataset\\train\\y_train.txt", header=FALSE, 
@@ -81,3 +82,4 @@ names(df_set)<-gsub("gravity", "Gravity", names(df_set))
 # with the average of each variable for each activity and each subject.
 df_set_summary <- summarise_all(group_by(df_set, subject, activity), funs(mean))
 
+write.table(df_set_summary, "Summary.txt", row.name=FALSE)
